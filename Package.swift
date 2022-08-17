@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "SuperAppKit",
+    platforms: [
+           .iOS(.v12)
+       ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -20,7 +23,30 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "SuperAppKit",
-            dependencies: []),
+            dependencies: [
+                "APILayer", "BrowserBridge", "Kulibin",
+                "KulibinNetworking", "KulibinPersistency", "Malevich",
+                "Milligan", "Nestor", "Orwell", "SAKLocalShared",
+                "SuperAppKitWrapper", "Susanin", "ValetteKit",
+                "VKAccessibilityIdentifier", "VKAuth", "VKSVGImage", "Warhol"
+            ]),
+        .binaryTarget(name: "APILayer", path: "APILayer.xcframework"),
+        .binaryTarget(name: "BrowserBridge", path: "BrowserBridge.xcframework"),
+        .binaryTarget(name: "Kulibin", path: "Kulibin.xcframework"),
+        .binaryTarget(name: "KulibinNetworking", path: "KulibinNetworking.xcframework"),
+        .binaryTarget(name: "KulibinPersistency", path: "KulibinPersistency.xcframework"),
+        .binaryTarget(name: "Malevich", path: "Malevich.xcframework"),
+        .binaryTarget(name: "Milligan", path: "Milligan.xcframework"),
+        .binaryTarget(name: "Nestor", path: "Nestor.xcframework"),
+        .binaryTarget(name: "Orwell", path: "Orwell.xcframework"),
+        .binaryTarget(name: "SAKLocalShared", path: "SAKLocalShared.xcframework"),
+        .binaryTarget(name: "SuperAppKitWrapper", path: "SuperAppKitWrapper.xcframework"),
+        .binaryTarget(name: "Susanin", path: "Susanin.xcframework"),
+        .binaryTarget(name: "ValetteKit", path: "ValetteKit.xcframework"),
+        .binaryTarget(name: "VKAccessibilityIdentifier", path: "VKAccessibilityIdentifier.xcframework"),
+        .binaryTarget(name: "VKAuth", path: "VKAuth.xcframework"),
+        .binaryTarget(name: "VKSVGImage", path: "VKSVGImage.xcframework"),
+        .binaryTarget(name: "Warhol", path: "Warhol.xcframework"),
         .testTarget(
             name: "SuperAppKitTests",
             dependencies: ["SuperAppKit"]),

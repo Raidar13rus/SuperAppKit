@@ -1,0 +1,11 @@
+framework module Kulibin {
+  umbrella header "Kulibin.h"
+
+  export *
+  module * { export * }
+}
+
+module Kulibin.Swift {
+    header "Kulibin-Swift.h"
+    requires objc
+}

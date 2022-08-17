@@ -1,0 +1,439 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target arm64-apple-ios11.4 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Osize -module-name Kulibin
+import Foundation
+@_exported import Kulibin
+import Swift
+import UIKit
+import _Concurrency
+infix operator !! : NilCoalescingPrecedence
+@inlinable internal func !! <T, E>(lhs: T?, rhs: @autoclosure () -> E) throws -> T where E : Swift.Error {
+    guard let result = lhs else { throw rhs() }
+    return result
+}
+public struct ConcreteValue<Value> {
+  public typealias Value = Value
+  public var value: Value
+}
+public func reabstract(value: Any) -> Any
+public struct Promise<Value> {
+  public typealias Impl = Kulibin.__KITPromise
+  public typealias Result = Swift.Result<Value, Swift.Error>
+  public enum State {
+    case given
+    case broken(Swift.Error)
+    case fulfilled(Value)
+  }
+  public enum Continuation {
+    case success(Value)
+    case failure(Swift.Error)
+    case promise(Kulibin.Promise<Value>)
+  }
+  public var state: Kulibin.Promise<Value>.State {
+    get
+  }
+  public init(resolved result: Kulibin.Promise<Value>.Result)
+  public init(resolvedUsing block: inout ((Kulibin.Promise<Value>.Result) -> Swift.Void)?)
+  public func sink(_ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void)
+  public func transform<NewValue>(dispatch: @escaping (@escaping () -> Swift.Void) -> Swift.Void = { $0() }, _ block: @escaping (Kulibin.Promise<Value>.Result) -> Kulibin.Promise<NewValue>.Continuation) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public init<T>() where Value == T?
+  public init(broken error: Swift.Error)
+  public init(fulfilled value: Value)
+  public static func `do`(_ block: () -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+  public static func `try`(_ block: () throws -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+  public static func give(_ block: (@escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Swift.Void) -> Kulibin.Promise<Value>
+  public static func resolvedLater() -> (promise: Kulibin.Promise<Value>, resolver: (Kulibin.Promise<Value>.Result) -> Swift.Void)
+}
+extension Kulibin.Promise {
+  public func tap(_ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tap(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tap(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tap(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tap(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Kulibin.Promise<Value>
+}
+extension Kulibin.Promise {
+  public func tapValue(_ block: @escaping (Value) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapValue(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapValue(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapValue(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Value) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapValue(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Value) -> Swift.Void) -> Kulibin.Promise<Value>
+}
+extension Kulibin.Promise {
+  public func tapError(_ block: @escaping (Swift.Error) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapError(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Swift.Error) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapError(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Swift.Error) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapError(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Swift.Error) -> Swift.Void) -> Kulibin.Promise<Value>
+  public func tapError(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Swift.Error) -> Swift.Void) -> Kulibin.Promise<Value>
+}
+extension Kulibin.Promise {
+  public func map<NewValue>(_ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Swift.Result<NewValue, Swift.Error>) -> Kulibin.Promise<NewValue>
+  public func map<NewValue>(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Swift.Result<NewValue, Swift.Error>) -> Kulibin.Promise<NewValue>
+  public func map<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Swift.Result<NewValue, Swift.Error>) -> Kulibin.Promise<NewValue>
+  public func map<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Swift.Result<NewValue, Swift.Error>) -> Kulibin.Promise<NewValue>
+  public func map<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Swift.Result<NewValue, Swift.Error>) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public func mapValue<NewValue>(_ block: @escaping (Value) throws -> NewValue) -> Kulibin.Promise<NewValue>
+  public func mapValue<NewValue>(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> NewValue) -> Kulibin.Promise<NewValue>
+  public func mapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> NewValue) -> Kulibin.Promise<NewValue>
+  public func mapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Value) throws -> NewValue) -> Kulibin.Promise<NewValue>
+  public func mapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Value) throws -> NewValue) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public func mapError(_ block: @escaping (Swift.Error) throws -> Swift.Error) -> Kulibin.Promise<Value>
+  public func mapError(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Swift.Error) throws -> Swift.Error) -> Kulibin.Promise<Value>
+  public func mapError(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Swift.Error) throws -> Swift.Error) -> Kulibin.Promise<Value>
+  public func mapError(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Swift.Error) throws -> Swift.Error) -> Kulibin.Promise<Value>
+  public func mapError(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Swift.Error) throws -> Swift.Error) -> Kulibin.Promise<Value>
+}
+extension Kulibin.Promise {
+  public func flatMap<NewValue>(_ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMap<NewValue>(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMap<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMap<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMap<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Kulibin.Promise<Value>.Result) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public func flatMapValue<NewValue>(_ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapValue<NewValue>(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapValue<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public func flatMapError<NewValue>(_ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapError<NewValue>(syncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapError<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapError<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, after deadline: Dispatch.DispatchTime, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+  public func flatMapError<NewValue>(asyncOnQueue queue: Dispatch.DispatchQueue, afterDelay delay: Foundation.TimeInterval, _ block: @escaping (Value) throws -> Kulibin.Promise<NewValue>) -> Kulibin.Promise<NewValue>
+}
+extension Kulibin.Promise {
+  public static func all<S, T>(in sequence: S) -> Kulibin.Promise<[T]> where S : Swift.Sequence, S.Element == Kulibin.Promise<T>
+  public static func any<S, T>(in sequence: S) -> Kulibin.Promise<T> where S : Swift.Sequence, S.Element == Kulibin.Promise<T>
+}
+extension Kulibin.Promise {
+  public static func giveSync(on queue: Dispatch.DispatchQueue, block: @escaping (@escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Swift.Void) -> Kulibin.Promise<Value>
+  public static func giveAsync(on queue: Dispatch.DispatchQueue = .global(), block: @escaping (@escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Swift.Void) -> Kulibin.Promise<Value>
+  public static func giveAsync(on queue: Dispatch.DispatchQueue = .global(), after deadline: Dispatch.DispatchTime, block: @escaping (@escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Swift.Void) -> Kulibin.Promise<Value>
+  public static func giveAsync(on queue: Dispatch.DispatchQueue = .global(), after delay: Foundation.TimeInterval, block: @escaping (@escaping (Kulibin.Promise<Value>.Result) -> Swift.Void) -> Swift.Void) -> Kulibin.Promise<Value>
+  public static func doSync(on queue: Dispatch.DispatchQueue, block: @escaping () -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+  public static func doAsync(on queue: Dispatch.DispatchQueue = .global(), block: @escaping () -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+  public static func doAsync(on queue: Dispatch.DispatchQueue = .global(), after deadline: Dispatch.DispatchTime, block: @escaping () -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+  public static func doAsync(on queue: Dispatch.DispatchQueue = .global(), after delay: Foundation.TimeInterval, block: @escaping () -> Kulibin.Promise<Value>.Continuation) -> Kulibin.Promise<Value>
+}
+extension Kulibin.Promise : Swift._ObjectiveCBridgeable {
+  public typealias _ObjectiveCType = Kulibin.__KITPromise<Swift.AnyObject>
+  public func _bridgeToObjectiveC() -> Kulibin.__KITPromise<Value> where Value : AnyObject
+  public func _bridgeToObjectiveC() -> Kulibin.__KITPromise<Swift.AnyObject>
+  public static func _conditionallyBridgeFromObjectiveC(_ ref: Kulibin.__KITPromise<Swift.AnyObject>, result: inout Kulibin.Promise<Value>?) -> Swift.Bool
+  public static func _unconditionallyBridgeFromObjectiveC(_ source: Kulibin.__KITPromise<Swift.AnyObject>?) -> Kulibin.Promise<Value>
+  public static func _forceBridgeFromObjectiveC(_ ref: Kulibin.__KITPromise<Swift.AnyObject>, result: inout Kulibin.Promise<Value>?)
+  public static func _getObjectiveCType() -> Swift.AnyObject.Type
+  public static func _isBridgedToObjectiveC() -> Swift.Bool
+}
+extension Kulibin.Promise.State : Swift.Equatable where Value : Swift.Equatable {
+  public static func == (lhs: Kulibin.Promise<Value>.State, rhs: Kulibin.Promise<Value>.State) -> Swift.Bool
+}
+public protocol _OptionalProtocol : Swift.ExpressibleByNilLiteral {
+  associatedtype Wrapped
+  static var none: Self { get }
+  static func some(_ wrapped: Self.Wrapped) -> Self
+  var kit_optional: Self.Wrapped? { get set }
+}
+extension Swift.Optional : Kulibin._OptionalProtocol {
+  @inlinable public var kit_optional: Wrapped? {
+    get { self }
+    set { self = newValue }
+  }
+}
+extension Swift.Character {
+  @available(iOS 10.2, *)
+  public var isEmoji: Swift.Bool {
+    get
+  }
+}
+extension Swift.String {
+  @available(iOS 10.2, *)
+  public var isEmoji: Swift.Bool {
+    get
+  }
+}
+extension Foundation.NSString {
+  @available(iOS 10.2, *)
+  @objc(kit_isEmoji) dynamic public var isEmoji: Swift.Bool {
+    @objc get
+  }
+}
+extension Swift.Sequence {
+  public var kit_shared: Kulibin.Shared<Self> {
+    get
+  }
+}
+public struct SharedIterator<Wrapped> : Swift.IteratorProtocol where Wrapped : Swift.IteratorProtocol {
+  public typealias Element = Wrapped.Element
+  public mutating func next() -> Kulibin.SharedIterator<Wrapped>.Element?
+}
+extension Kulibin.Shared : Swift.Sequence where Wrapped : Swift.Sequence {
+  public typealias Element = Wrapped.Element
+  public typealias Iterator = Kulibin.SharedIterator<Wrapped.Iterator>
+  final public func makeIterator() -> Kulibin.Shared<Wrapped>.Iterator
+  final public var underestimatedCount: Swift.Int {
+    get
+  }
+  final public func withContiguousStorageIfAvailable<R>(_ body: (Swift.UnsafeBufferPointer<Kulibin.Shared<Wrapped>.Element>) throws -> R) rethrows -> R?
+}
+extension Kulibin.Shared : Swift.Collection where Wrapped : Swift.Collection {
+  public typealias Index = Wrapped.Index
+  public typealias Indices = Wrapped.Indices
+  public typealias SubSeqence = Wrapped.SubSequence
+  final public subscript(position: Wrapped.Index) -> Wrapped.Element {
+    get
+  }
+  final public subscript(bounds: Swift.Range<Kulibin.Shared<Wrapped>.Index>) -> Wrapped.SubSequence {
+    get
+  }
+  final public var indices: Wrapped.Indices {
+    get
+  }
+  final public var isEmpty: Swift.Bool {
+    get
+  }
+  final public var count: Swift.Int {
+    get
+  }
+  final public var startIndex: Kulibin.Shared<Wrapped>.Index {
+    get
+  }
+  final public var endIndex: Kulibin.Shared<Wrapped>.Index {
+    get
+  }
+  final public func index(after index: Wrapped.Index) -> Wrapped.Index
+  final public func index(_ index: Kulibin.Shared<Wrapped>.Index, offsetBy distance: Swift.Int) -> Kulibin.Shared<Wrapped>.Index
+  final public func index(_ index: Kulibin.Shared<Wrapped>.Index, offsetBy distance: Swift.Int, limitedBy limit: Kulibin.Shared<Wrapped>.Index) -> Kulibin.Shared<Wrapped>.Index?
+  final public func distance(from start: Kulibin.Shared<Wrapped>.Index, to end: Kulibin.Shared<Wrapped>.Index) -> Swift.Int
+  final public func formIndex(after index: inout Kulibin.Shared<Wrapped>.Index)
+  public typealias SubSequence = Wrapped.SubSequence
+}
+extension Kulibin.Shared : Swift.BidirectionalCollection where Wrapped : Swift.BidirectionalCollection {
+  final public func index(before i: Kulibin.Shared<Wrapped>.Index) -> Kulibin.Shared<Wrapped>.Index
+  final public func formIndex(before index: inout Kulibin.Shared<Wrapped>.Index)
+  final public func distance(from start: Kulibin.Shared<Wrapped>.Index, to end: Kulibin.Shared<Wrapped>.Index) -> Swift.Int
+}
+extension Kulibin.Shared : Swift.MutableCollection where Wrapped : Swift.MutableCollection {
+  final public subscript(position: Kulibin.Shared<Wrapped>.Index) -> Kulibin.Shared<Wrapped>.Element {
+    get
+    set
+  }
+  final public subscript(bounds: Swift.Range<Kulibin.Shared<Wrapped>.Index>) -> Wrapped.SubSequence {
+    get
+    set
+  }
+  final public func partition(by belongsInSecondPartition: (Kulibin.Shared<Wrapped>.Element) throws -> Swift.Bool) rethrows -> Kulibin.Shared<Wrapped>.Index
+  final public func swapAt(_ i: Kulibin.Shared<Wrapped>.Index, _ j: Kulibin.Shared<Wrapped>.Index)
+  final public func withContiguousMutableStorageIfAvailable<R>(_ body: (inout Swift.UnsafeMutableBufferPointer<Kulibin.Shared<Wrapped>.Element>) throws -> R) rethrows -> R?
+}
+extension Kulibin.Shared : Swift.RangeReplaceableCollection where Wrapped : Swift.RangeReplaceableCollection {
+  convenience public init()
+  convenience public init(repeating repeatedValue: Kulibin.Shared<Wrapped>.Element, count: Swift.Int)
+  convenience public init<S>(_ elements: S) where S : Swift.Sequence, Wrapped.Element == S.Element
+  final public func replaceSubrange<C>(_ subrange: Swift.Range<Kulibin.Shared<Wrapped>.Index>, with newElements: C) where C : Swift.Collection, Wrapped.Element == C.Element
+  final public func reserveCapacity(_ count: Swift.Int)
+  final public func append(_ newElement: Kulibin.Shared<Wrapped>.Element)
+  final public func append<S>(contentsOf newElements: S) where S : Swift.Sequence, Wrapped.Element == S.Element
+  final public func insert(_ newElement: Kulibin.Shared<Wrapped>.Element, at index: Kulibin.Shared<Wrapped>.Index)
+  final public func insert<S>(contentsOf newElements: S, at index: Kulibin.Shared<Wrapped>.Index) where S : Swift.Collection, Wrapped.Element == S.Element
+  final public func remove(at index: Kulibin.Shared<Wrapped>.Index) -> Kulibin.Shared<Wrapped>.Element
+  final public func removeSubrange(_ bounds: Swift.Range<Kulibin.Shared<Wrapped>.Index>)
+  final public func removeFirst() -> Kulibin.Shared<Wrapped>.Element
+  final public func removeFirst(_ k: Swift.Int)
+  final public func removeAll(keepingCapacity keepCapacity: Swift.Bool)
+  final public func removeAll(where shouldBeRemoved: (Kulibin.Shared<Wrapped>.Element) throws -> Swift.Bool) rethrows
+  final public subscript(bounds: Kulibin.Shared<Wrapped>.Index) -> Kulibin.Shared<Wrapped>.Element {
+    get
+  }
+  final public subscript(bounds: Swift.Range<Kulibin.Shared<Wrapped>.Index>) -> Wrapped.SubSequence {
+    get
+  }
+}
+extension Swift.RangeReplaceableCollection {
+  public func kit_share() -> Kulibin.Shared<Self>
+}
+extension Kulibin.Shared : Swift.RandomAccessCollection where Wrapped : Swift.RandomAccessCollection {
+}
+public protocol Subscriptable {
+  associatedtype Key
+  associatedtype Value
+  subscript(key: Self.Key) -> Self.Value? { get set }
+}
+extension Swift.Dictionary : Kulibin.Subscriptable {
+}
+extension Kulibin.Subscriptable {
+  public subscript(key: Self.Key, default value: @autoclosure () -> Self.Value) -> Self.Value {
+    get
+    set
+  }
+}
+extension Kulibin.Shared : Kulibin.Subscriptable where Wrapped : Kulibin.Subscriptable {
+  final public subscript(key: Wrapped.Key) -> Wrapped.Value? {
+    get
+    set
+  }
+  public typealias Key = Wrapped.Key
+  public typealias Value = Wrapped.Value
+}
+extension Kulibin.Shared where Wrapped : Swift.SetAlgebra {
+  final public func insert(_ newElement: Wrapped.Element)
+}
+extension Kulibin.ScreenSizeCategory : Swift.Comparable {
+  public static func < (lhs: Kulibin.ScreenSizeCategory, rhs: Kulibin.ScreenSizeCategory) -> Swift.Bool
+}
+public enum UniversalCodable {
+  public enum Error : Swift.Error {
+    case unsupportedValueType
+    case unsupportedContainerType
+    public static func == (a: Kulibin.UniversalCodable.Error, b: Kulibin.UniversalCodable.Error) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  case array([Kulibin.UniversalCodable])
+  case dictionary([Swift.String : Kulibin.UniversalCodable])
+  case string(Swift.String)
+  case number(Swift.Double)
+  case boolean(Swift.Bool)
+  case null
+}
+extension Kulibin.UniversalCodable : Swift.Decodable {
+  public init(from decoder: Swift.Decoder) throws
+}
+extension Kulibin.UniversalCodable : Swift.Encodable {
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension Kulibin.UniversalCodable : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public enum ObjCEnumerationImage {
+  case dynamicClasses
+  public static func == (a: Kulibin.ObjCEnumerationImage, b: Kulibin.ObjCEnumerationImage) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct ObjCClassList : Swift.Sequence {
+  public struct Iterator : Swift.IteratorProtocol {
+    public mutating func next() -> Swift.AnyClass?
+    public typealias Element = AnyObject.Type
+  }
+  public func makeIterator() -> Kulibin.ObjCClassList.Iterator
+  public typealias Element = AnyObject.Type
+}
+public func objc_enumerateClasses(fromImage image: Kulibin.ObjCEnumerationImage = .dynamicClasses, matchingNamePrefix namePrefix: Swift.String? = nil, conformingTo protocol: ObjectiveC.`Protocol`? = nil, subclassing superclass: Swift.AnyClass? = nil) -> Kulibin.ObjCClassList
+extension Swift.Collection {
+  @inlinable public subscript(kitSafeIndex index: Self.Index) -> Self.Element? {
+    get {
+        indices.contains(index) ? self[index] : nil
+    }
+  }
+}
+final public class Shared<Wrapped> {
+  public init(_ wrapped: Wrapped)
+  final public func access<T>(_ block: (Wrapped) throws -> T) rethrows -> T
+  final public func mutate<T>(_ block: (inout Wrapped) throws -> T) rethrows -> T
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @available(watchOS, unavailable)
+public class KITCrashInfo : ObjectiveC.NSObject {
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(watchOS, unavailable)
+final public class KITCrashDetector : ObjectiveC.NSObject {
+  @objc deinit
+}
+final public class CocoaObjectDecoder {
+  final public var userInfo: [Swift.CodingUserInfoKey : Any]
+  public init()
+  final public func decode<T>(_ type: T.Type, from data: ObjectiveC.NSObject) throws -> T where T : Swift.Decodable
+  @objc deinit
+}
+extension Dispatch.DispatchQueue {
+  public func kit_debounce(after timeInterval: Foundation.TimeInterval, _ fn: @escaping () -> Swift.Void) -> () -> Swift.Void
+  public func kit_debounce<T0>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0) -> Swift.Void) -> (T0) -> Swift.Void
+  public func kit_debounce<T0, T1>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1) -> Swift.Void) -> (T0, T1) -> Swift.Void
+  public func kit_debounce<T0, T1, T2>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1, T2) -> Swift.Void) -> (T0, T1, T2) -> Swift.Void
+  public func kit_debounce<T0, T1, T2, T3>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1, T2, T3) -> Swift.Void) -> (T0, T1, T2, T3) -> Swift.Void
+}
+extension Dispatch.DispatchQueue {
+  public func kit_throttle(after timeInterval: Foundation.TimeInterval, _ fn: @escaping () -> Swift.Void) -> () -> Swift.Void
+  public func kit_throttle<T0>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0) -> Swift.Void) -> (T0) -> Swift.Void
+  public func kit_throttle<T0, T1>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1) -> Swift.Void) -> (T0, T1) -> Swift.Void
+  public func kit_throttle<T0, T1, T2>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1, T2) -> Swift.Void) -> (T0, T1, T2) -> Swift.Void
+  public func kit_throttle<T0, T1, T2, T3>(after timeInterval: Foundation.TimeInterval, _ fn: @escaping (T0, T1, T2, T3) -> Swift.Void) -> (T0, T1, T2, T3) -> Swift.Void
+}
+public struct UniversalCodingKey : Swift.CodingKey {
+  public var stringValue: Swift.String {
+    get
+  }
+  public var intValue: Swift.Int? {
+    get
+  }
+  public init(stringValue: Swift.String)
+  public init(intValue: Swift.Int)
+}
+final public class CocoaObjectEncoder {
+  final public var userInfo: [Swift.CodingUserInfoKey : Any]
+  public init()
+  final public func encode<T>(_ value: T) throws -> ObjectiveC.NSObject where T : Swift.Encodable
+  @objc deinit
+}
+public struct Once<Wrapped> {
+  public init(_ value: Wrapped)
+  public func consume() -> Wrapped?
+  public var consumed: Swift.Bool {
+    get
+  }
+}
+extension Kulibin.Once {
+  public func call<R>() -> R? where Wrapped == () -> R
+  public func call<T1, R>(_ a1: T1) -> R? where Wrapped == (T1) -> R
+  public func call<T1, T2, R>(_ a1: T1, _ a2: T2) -> R? where Wrapped == (T1, T2) -> R
+  public func call<T1, T2, T3, R>(_ a1: T1, _ a2: T2, _ a3: T3) -> R? where Wrapped == (T1, T2, T3) -> R
+  public func call<T1, T2, T3, T4, R>(_ a1: T1, _ a2: T2, _ a3: T3, _ a4: T4) -> R? where Wrapped == (T1, T2, T3, T4) -> R
+}
+extension Kulibin.Once : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension Kulibin.Once : Swift.Hashable {
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (lhs: Kulibin.Once<Wrapped>, rhs: Kulibin.Once<Wrapped>) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension Kulibin.Once : Foundation.ReferenceConvertible where Wrapped : AnyObject {
+  public typealias ReferenceType = Kulibin.__KITOnce<Wrapped>
+}
+extension Kulibin.Once : Swift._ObjectiveCBridgeable {
+  public typealias _ObjectiveCType = Kulibin.__KITOnce<Swift.AnyObject>
+  public func _bridgeToObjectiveC() -> Kulibin.__KITOnce<Wrapped> where Wrapped : AnyObject
+  public func _bridgeToObjectiveC() -> Kulibin.__KITOnce<Swift.AnyObject>
+  public static func _conditionallyBridgeFromObjectiveC(_ guts: Kulibin.__KITOnce<Swift.AnyObject>, result: inout Kulibin.Once<Wrapped>?) -> Swift.Bool
+  public static func _unconditionallyBridgeFromObjectiveC(_ source: Kulibin.__KITOnce<Swift.AnyObject>?) -> Kulibin.Once<Wrapped>
+  public static func _forceBridgeFromObjectiveC(_ ref: Kulibin.__KITOnce<Swift.AnyObject>, result: inout Kulibin.Once<Wrapped>?)
+  public static func _getObjectiveCType() -> Swift.AnyObject.Type
+  public static func _isBridgedToObjectiveC() -> Swift.Bool
+}
+extension Kulibin.UniversalCodable.Error : Swift.Equatable {}
+extension Kulibin.UniversalCodable.Error : Swift.Hashable {}
+extension Kulibin.ObjCEnumerationImage : Swift.Equatable {}
+extension Kulibin.ObjCEnumerationImage : Swift.Hashable {}
